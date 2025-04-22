@@ -2,10 +2,42 @@
 name = "cybersec-survey"
 version = "0.1.0"
 description = "A GUI for manually classifying news into cybersecurity/non-cybersecurity"
-requires-python = ">=3.8"
-
-dependencies = [
-    "streamlit",
-    "sqlalchemy"
+maintainers = [{ name = "AIT", email = "lukas.linauer@ait.ac.at" }]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
 ]
 
+requires-python = ">=3.11"
+
+
+dependencies = [
+    "sqlalchemy",
+    "pyyaml>=6.0.2",
+    "flask>=3.1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[build-system]
+requires = [
+    "setuptools>=61",
+    "setuptools_scm[toml]>=6.2",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 142
+target-version = "py312"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore:.*_app_ctx_stack.*:DeprecationWarning",
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning"
+]
