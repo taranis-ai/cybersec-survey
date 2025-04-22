@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cybersecurity Classifier</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <style>
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Ready to classify Cybersecurity News?</h2>
+
+    {% if error %}
+      <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="/">
+      <input type="text" name="username" placeholder="Your name" required>
+      <div class="button-row">
+        <button type="submit">Start</button>
+        <a href="/export">
+          <button type="button" style="background-color: #6c757d;">Data Export</button>
+        </a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

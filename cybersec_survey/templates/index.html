@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Classify</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Cybersecurity News Classifier</h2>
+    <p>User: {{ username }}</p>
+
+    <p id="progress-label">News Item: 1 / 10</p>
+    <div id="text-container">Loading...</div>
+
+    <button onclick="label('yes')" id="btn-yes">Cybersecurity</button>
+    <button onclick="label('no')" id="btn-no">Not Cybersecurity</button>
+    <form method="GET" action="/logout">
+        <button type="submit" style="background-color: #dc3545;">Exit</button>
+    </form>
+  </div>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
