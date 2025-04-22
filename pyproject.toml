@@ -1,0 +1,11 @@
+[project]
+name = "cybersec-survey"
+version = "0.1.0"
+description = "A GUI for manually classifying news into cybersecurity/non-cybersecurity"
+requires-python = ">=3.8"
+
+dependencies = [
+    "streamlit",
+    "sqlalchemy"
+]
+
