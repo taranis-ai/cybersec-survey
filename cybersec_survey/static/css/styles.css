@@ -1,0 +1,80 @@
+/* General page layout */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  /* Centered form container */
+  .form-container {
+    background-color: white;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 900px; /* ⬅️ Wider */
+  }
+
+  /* Form input */
+  input[type="text"] {
+    padding: 0.6rem;
+    width: 80%;
+    margin-top: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+  }
+
+  /* Button styling */
+  button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    margin: 1rem 0.5rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  button:active {
+    background-color: #003d80;
+  }
+
+  #text-container {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    max-width: 800px;       /* ⬅️ Wider display */
+    width: 100%;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    white-space: pre-wrap;  /* ⬅️ Preserve line breaks, wrap nicely */
+  }
+
+
+  /* Progress label */
+  #progress-label {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  button[type="submit"] {
+    margin-top: 1rem;
+  }
