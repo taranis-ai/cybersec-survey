@@ -2,7 +2,7 @@ import os
 import yaml
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from db.models import Base, NewsItem
+from cybersec_survey.db.models import Base, NewsItem
 
 DB_PATH = "sqlite:///database.db"
 engine = create_engine(DB_PATH, connect_args={"check_same_thread": False})

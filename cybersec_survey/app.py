@@ -1,5 +1,5 @@
-from db import init_db, get_session
-from db.models import NewsItem, ClassificationResult
+from cybersec_survey.db import init_db, get_session
+from cybersec_survey.db.models import NewsItem, ClassificationResult
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, Response
 import os
 import yaml
@@ -95,7 +95,7 @@ def admin_dashboard():
 
     db = get_session()
 
-    from db.models import NewsItem, ClassificationResult
+    from cybersec_survey.db.models import NewsItem, ClassificationResult
 
     all_news_items = db.query(NewsItem).all()
     export_data = []
@@ -114,7 +114,3 @@ def admin_dashboard():
     yaml_data = yaml.dump(export_data, sort_keys=False, allow_unicode=True, default_style="")
 
     return Response(yaml_data, mimetype="text/yaml", headers={"Content-Disposition": "attachment;filename=classified_news_items.yaml"})
-
-
-if __name__ == "__main__":
-    app.run(debug=True, port=5004)
