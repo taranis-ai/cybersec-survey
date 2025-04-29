@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  cybersec_survey:
+    image: cybersec_survey
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5006:5006"
+    volumes:
+      - survey_data:/app/data
+
+volumes:
+  survey_data:
