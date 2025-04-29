@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "5006:5006"
+      - "5306:5306"
     volumes:
       - survey_data:/app/data
 
