@@ -6,6 +6,9 @@ class Settings(BaseSettings):
     DATA_PATH: str = ""
     DB_NAME: str = "survey_data.db"
     DEFAULT_NEWS_ITEM_FILE: str = "default_news_items.json"
+    PORT: int = 5006
+    HOST: str = "0.0.0.0"
+    DEBUG: bool = False
 
 
 Config = Settings()
