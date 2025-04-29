@@ -1,10 +1,11 @@
-import os
-import yaml
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from cybersec_survey.db.models import Base, NewsItem
+from cybersec_survey.config import Config
+from pathlib import Path
+import pandas as pd
 
-DB_PATH = "sqlite:///database.db"
+DB_PATH = f"sqlite:///{Config.DATA_PATH}/{Config.DB_NAME}"
 engine = create_engine(DB_PATH, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine)
 
@@ -19,11 +20,19 @@ def init_db():
     existing = session.query(NewsItem).count()
 
     if existing == 0:
-        news_item_path = os.path.join(os.path.dirname(__file__), "..", "data", "news_items.yaml")
-        with open(news_item_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-            for news_item in data.get("news_items", []):
-                session.add(NewsItem(content=news_item.get("content", ""), language=news_item.get("language", "")))
+        default_news_items_path = Path(Config.DATA_PATH) / Config.DEFAULT_NEWS_ITEM_FILE
+        data_df = pd.read_json(default_news_items_path)
+        for _, row in data_df.iterrows():
+            session.add(
+                NewsItem(
+                    id=row["news_item_id"],
+                    story_id=row["id"],
+                    title=row["title"],
+                    content=row["content"],
+                    language=row["language"],
+                    tokens=row["tokens"],
+                )
+            )
         session.commit()
         print("✅ Database initialized from defaults.")
     else:
