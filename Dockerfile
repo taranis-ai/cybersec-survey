@@ -21,17 +21,14 @@ FROM python:3.12-slim
 
 RUN addgroup --system user && adduser --system --ingroup user user
 COPY --from=builder --chown=user:user /app/.venv /app/.venv
-COPY --chown=user:user default_data/ /app/data
 
 WORKDIR /app
-VOLUME /app/data
 
 ENV PYTHONOPTIMIZE=1
 ENV PATH="/app/.venv/bin:$PATH"
 ENV GRANIAN_THREADS=2
 ENV GRANIAN_WORKERS=2
 ENV GRANIAN_BLOCKING_THREADS=4
-ENV DATA_PATH="/app/data"
 
 USER user
 
