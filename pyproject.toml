@@ -16,12 +16,14 @@ requires-python = ">=3.11"
 
 dependencies = [
     "sqlalchemy",
-    "pyyaml>=6.0.2",
     "flask>=3.1.0",
     "pydantic>=2.11.3",
     "pydantic-settings>=2.9.1",
     "pandas>=2.2.3",
 ]
+
+[tool.setuptools.packages.find]
+include = ["cybersec_survey*"]
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
