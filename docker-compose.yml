@@ -1,0 +1,13 @@
+services:
+  app:
+    image: cybersec-survey:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5006:5006"
+    volumes:
+      - "survey_data:/app/data"
+
+volumes:
+  survey_data:
