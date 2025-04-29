@@ -35,6 +35,6 @@ ENV DATA_PATH="/app/data"
 
 USER user
 
-EXPOSE 5006
+EXPOSE 5306
 
-CMD ["cybersec_survey", "--host", "0.0.0.0", "--port", "5006"]
+CMD ["cybersec_survey", "--host", "0.0.0.0", "--port", "5306"]
