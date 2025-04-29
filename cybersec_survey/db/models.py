@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker
-from config import Config
+from cybersec_survey.config import Config
 
 DB_PATH = f"sqlite:///{Config.DATA_PATH}/{Config.DB_NAME}"
 engine = create_engine(DB_PATH, connect_args={"check_same_thread": False})
