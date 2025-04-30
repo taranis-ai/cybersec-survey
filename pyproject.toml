@@ -25,6 +25,12 @@ dependencies = [
 [tool.setuptools.packages.find]
 include = ["cybersec_survey*"]
 
+[tool.setuptools.package-data]
+"cybersec_survey" = [
+  "templates/**/*.html",
+  "static/**/*"
+]
+
 [project.optional-dependencies]
 dev = ["pytest", "ruff"]
 
