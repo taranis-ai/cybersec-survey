@@ -13,7 +13,7 @@ function renderText() {
     const container = document.getElementById("text-container");
 
     if (currentIndex >= news_items.length) {
-      container.innerText = "Done!";
+      container.innerText = "Done! Thank you very much!";
       label.innerText = `✓ ${news_items.length} / ${news_items.length}`;
       return;
     }

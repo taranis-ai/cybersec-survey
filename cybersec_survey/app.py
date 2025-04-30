@@ -14,9 +14,25 @@ init_db()
 @app.route("/api/news_items")
 def get_news_items():
     db = get_session()
-
     if "news_item_ids" not in session:
-        items = db.query(NewsItem).order_by(func.random()).limit(10).all()
+        # Subquery: count how many times each news_item_id appears in classifications
+        classification_counts = (
+            db.query(ClassificationResult.news_item_id, func.count(ClassificationResult.id).label("class_count"))
+            .group_by(ClassificationResult.news_item_id)
+            .subquery()
+        )
+
+        LIMIT = 20
+
+        # Left join with NewsItem and order by classification count (nulls = 0)
+        items = (
+            db.query(NewsItem)
+            .outerjoin(classification_counts, NewsItem.id == classification_counts.c.news_item_id)
+            .order_by(classification_counts.c.class_count.asc().nullsfirst(), func.random())
+            .limit(LIMIT)
+            .all()
+        )
+
         session["news_item_ids"] = [item.id for item in items]
         session["current_index"] = 0
     else:
