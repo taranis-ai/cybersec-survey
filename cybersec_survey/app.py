@@ -63,11 +63,6 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/error")
-def error():
-    1 / 0
-
-
 @app.route("/classify")
 def classify():
     if "username" not in session:
