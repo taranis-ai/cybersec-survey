@@ -92,22 +92,40 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/export", methods=["GET", "POST"])
+@app.route("/export", methods=["GET"])
 def export():
-    if request.method == "POST":
-        password = request.form.get("password")
-        if password != "dimmuborg1r":
-            return render_template("export.html", error="Wrong password")
-
-        session["is_admin"] = True
-        return redirect(url_for("admin_dashboard"))
     return render_template("export.html")
 
 
-@app.route("/export/dashboard")
-def admin_dashboard():
-    if not session.get("is_admin"):
-        return redirect(url_for("export"))
+@app.route("/export-users", methods=["POST"])
+def export_users():
+    password = request.form.get("password")
+    if password != "dimmuborg1r":
+        return render_template("export.html", error="Wrong password")
+
+    db = get_session()
+
+    from cybersec_survey.db.models import ClassificationResult
+
+    all_rows = db.query(ClassificationResult).all()
+    user_id_dict = {}
+    for row in all_rows:
+        if row.username in user_id_dict:
+            user_id_dict[row.username].append(row.news_item_id)
+        else:
+            user_id_dict[row.username] = [row.news_item_id]
+    db.close()
+
+    json_data = json.dumps(user_id_dict, ensure_ascii=False, indent=2)
+
+    return Response(json_data, mimetype="application/json", headers={"Content-Disposition": "attachment;filename=users.json"})
+
+
+@app.route("/export-all", methods=["POST"])
+def export_all():
+    password = request.form.get("password")
+    if password != "dimmuborg1r":
+        return render_template("export.html", error="Wrong password")
 
     db = get_session()
 

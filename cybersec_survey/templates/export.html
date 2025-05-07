@@ -26,9 +26,22 @@
       <input type="password" name="password" placeholder="Password" required>
 
       <div class="button-row">
-        <button type="submit">Export</button>
+        <button
+          type="submit"
+          formaction="/export-all"
+          formmethod="post"
+        >Export</button>
+
+        <button
+          type="submit"
+          formaction="/export-users"
+          formmethod="post"
+        >Get Users</button>
+
         <a href="/">
-          <button type="button" style="background-color: #6c757d;">← Back</button>
+          <button type="button" style="background-color: #6c757d;">
+            ← Back
+          </button>
         </a>
       </div>
     </form>
