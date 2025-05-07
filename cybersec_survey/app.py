@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify, redirect, session, u
 import os
 import json
 from sqlalchemy.sql import func
+from cybersec_survey.config import Config
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev")
@@ -100,7 +101,7 @@ def export():
 @app.route("/export-users", methods=["POST"])
 def export_users():
     password = request.form.get("password")
-    if password != "dimmuborg1r":
+    if password != Config.ADMIN_PW:
         return render_template("export.html", error="Wrong password")
 
     db = get_session()
@@ -124,7 +125,7 @@ def export_users():
 @app.route("/export-all", methods=["POST"])
 def export_all():
     password = request.form.get("password")
-    if password != "dimmuborg1r":
+    if password != Config.ADMIN_PW:
         return render_template("export.html", error="Wrong password")
 
     db = get_session()

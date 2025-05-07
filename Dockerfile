@@ -19,6 +19,8 @@ RUN uv venv && \
 
 FROM python:3.12-slim
 
+ARG ADMIN_PW
+
 RUN addgroup --system user && adduser --system --ingroup user user
 COPY --from=builder --chown=user:user /app/.venv /app/.venv
 COPY --chown=user:user default_data/ /app/data
@@ -32,6 +34,7 @@ ENV GRANIAN_THREADS=2
 ENV GRANIAN_WORKERS=2
 ENV GRANIAN_BLOCKING_THREADS=4
 ENV DATA_PATH="/app/data"
+ENV ADMIN_PW=${ADMIN_PW:-password}
 
 USER user
 
