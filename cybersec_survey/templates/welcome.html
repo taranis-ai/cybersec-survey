@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome – News Classification Tool</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      line-height: 1.5;
+      padding: 0 1rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      margin-top: 1.5rem;
+    }
+    ul {
+      margin: 0.5rem 0 1rem 1.5rem;
+    }
+    .button-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .button-row button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    margin: 1rem 0.5rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    button:active {
+        background-color: #003d80;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the News Classification Tool!</h1>
+  <p>Your task is to assign each incoming article to one of the following categories:</p>
+
+  <h2>A) Cybersecurity-Relevant</h2>
+  <p>Articles that are of interest to cybersecurity professionals (e.g., SOC analysts, CERT teams, SREs, security staff in companies or NGOs). Typical topics include:</p>
+  <ul>
+    <li>Security incidents and data breaches</li>
+    <li>Vulnerability and exploit reports</li>
+    <li>Malware analysis and threat intelligence</li>
+    <li>Security tools and solutions</li>
+    <li>Best practices, frameworks, and guidelines (e.g., MITRE ATT&CK)</li>
+    <li>Laws, regulations, and compliance requirements in IT security</li>
+    <li>Upcoming security events and training</li>
+  </ul>
+
+  <h2>B) Non-Cybersecurity-Relevant</h2>
+  <p>Articles with no relevance to IT or cybersecurity. Typical topics include:</p>
+  <ul>
+    <li>Sports, culture, entertainment</li>
+    <li>Everyday lifestyle or health (without an IT focus)</li>
+    <li>Politics or business without a security angle</li>
+    <li>Scientific breakthroughs outside IT (e.g., biology, space exploration)</li>
+  </ul>
+
+  <h2>C) Unsure / Comment</h2>
+  <p>If you’re not certain whether an article is cybersecurity-relevant, choose “Unsure” and leave a brief comment, for example:</p>
+  <ul>
+    <li>“Unclear if this refers to a software vulnerability or just general risk.”</li>
+  </ul>
+  <p>If the only cybersecurity content appears in a single paragraph or subsection, flag it as Cybersecurity-Relevant (A). Only choose Unsure if you’ve applied all criteria—including context—and still cannot decide.</p>
+
+  <div class="button-row">
+    <form action="/classify" method="get">
+      <button type="submit">Start</button>
+    </form>
+  </div>
+</body>
+</html>

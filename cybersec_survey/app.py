@@ -70,7 +70,7 @@ def login():
         username = request.form.get("username")
         if username:
             session["username"] = username
-            return redirect(url_for("classify"))
+            return redirect(url_for("welcome"))
         else:
             return render_template("login.html", error="Please enter a name.")
 
@@ -85,6 +85,13 @@ def classify():
     if "username" not in session:
         return redirect(url_for("login"))
     return render_template("classify.html", username=session["username"])
+
+
+@app.route("/welcome")
+def welcome():
+    if "username" not in session:
+        return redirect(url_for("login"))
+    return render_template("welcome.html", username=session["username"])
 
 
 @app.route("/logout")
