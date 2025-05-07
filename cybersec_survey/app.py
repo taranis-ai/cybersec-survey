@@ -23,14 +23,12 @@ def get_news_items():
             .subquery()
         )
 
-        LIMIT = 20
-
         # Left join with NewsItem and order by classification count (nulls = 0)
         items = (
             db.query(NewsItem)
             .outerjoin(classification_counts, NewsItem.id == classification_counts.c.news_item_id)
             .order_by(classification_counts.c.class_count.asc().nullsfirst(), func.random())
-            .limit(LIMIT)
+            .limit(Config.NEWS_ITEMS_PER_SESSION)
             .all()
         )
 
