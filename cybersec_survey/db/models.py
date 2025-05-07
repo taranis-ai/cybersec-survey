@@ -24,3 +24,4 @@ class ClassificationResult(Base):
     username = Column(String, nullable=False)
     news_item_id = Column(String, ForeignKey("news_items.id"), nullable=False)
     cybersecurity = Column(String, nullable=False)
+    comment = Column(String, nullable=False)

@@ -49,12 +49,15 @@ def save_label():
         return jsonify({"error": "Not logged in"}), 401
 
     data = request.json
-    username = session["username"]
-    news_item_id = data["id"]
-    label = data["label"]
+    if not data:
+        return jsonify({"status": "error"})
+    username = session.get("username", "")
+    news_item_id = data.get("id", "")
+    label = data.get("label", "")
+    comment = data.get("comment", "")
 
     db = get_session()
-    result = ClassificationResult(username=username, news_item_id=news_item_id, cybersecurity=label)
+    result = ClassificationResult(username=username, news_item_id=news_item_id, cybersecurity=label, comment=comment)
     db.add(result)
     db.commit()
     db.close()
