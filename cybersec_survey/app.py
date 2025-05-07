@@ -84,7 +84,7 @@ def login():
 def classify():
     if "username" not in session:
         return redirect(url_for("login"))
-    return render_template("index.html", username=session["username"])
+    return render_template("classify.html", username=session["username"])
 
 
 @app.route("/logout")
