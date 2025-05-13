@@ -6,11 +6,11 @@
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <style>
-    #btn-unsure {
-      background-color: #ffc107; /* yellow */
-      color: #212529;
+
+    #btn-unsure.selected {
+      background-color: #ffc107 !important;
+      color: #212529 !important;
     }
-    /* Consistent button styling */
     .button-row button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -19,16 +19,14 @@
       cursor: pointer;
       margin: 0 0.5rem;
     }
+    .button-row button.selected {
+      background-color: #009e25;
+      color: #fff;
+    }
     .button-row button:hover {
       opacity: 0.9;
     }
-    /* Center the exit button under the middle button */
-    .exit-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 1rem;
-    }
-    .exit-container button {
+    .exit-button {
       background-color: #dc3545;
       color: #fff;
       padding: 0.5rem 1rem;
@@ -36,9 +34,26 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    .exit-container button:hover {
-      opacity: 0.9;
+    .move-button {
+      background-color: #c7c7c7;
+      color: #000000;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
+    .move-button:hover,
+    .move-button:active {
+      background-color: #c7c7c7;
+      color: #000000;
+    }
+
+    .exit-button:hover,
+    .exit-button:active {
+      background-color: #dc3545;
+      color: #ffffff;
+    }
+
   </style>
 </head>
 <body>
@@ -50,9 +65,9 @@
     <div id="text-container">Loading...</div>
 
     <div class="button-row">
-      <button onclick="label('yes')" id="btn-yes">Cybersecurity</button>
-      <button onclick="showCommentForm()" id="btn-unsure">Unsure</button>
-      <button onclick="label('no')" id="btn-no">Not Cybersecurity</button>
+      <button class="label-button" onclick="label('yes')" id="btn-yes">Cybersecurity</button>
+      <button class="label-button" onclick="showCommentForm()" id="btn-unsure" >Unsure</button>
+      <button class="label-button" onclick="label('no')" id="btn-no">Not Cybersecurity</button>
     </div>
 
     <div id="comment-section" style="display: none; margin-top: 1rem;">
@@ -73,13 +88,15 @@
       </form>
     </div>
 
-    <!-- Centered under the Unsure button -->
-    <div class="exit-container">
-      <form method="GET" action="/logout">
-        <button type="submit">Exit</button>
-      </form>
+    <div class="button-row" style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
+        <button class="move-button" onclick="move('prev')" type="submit">Previous</button>
+
+        <form method="GET" action="/logout">
+          <button class="exit-button" type="submit">Exit</button>
+        </form>
+
+        <button class="move-button" onclick="move('next')" type="submit">Next</button>
     </div>
-  </div>
 
   <script>
     function showCommentForm() {

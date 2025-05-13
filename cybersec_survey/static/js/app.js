@@ -10,27 +10,44 @@ async function fetchNewsItems() {
 }
 
 function renderText() {
-    const label = document.getElementById("progress-label");
-    const container = document.getElementById("text-container");
+  const label = document.getElementById("progress-label");
+  const container = document.getElementById("text-container");
 
-    if (currentIndex >= news_items.length) {
-      container.innerText = "Done! Thank you very much!";
-      label.innerText = `✓ ${news_items.length} / ${news_items.length}`;
-      return;
-    }
-
-    container.innerText = news_items[currentIndex].content;
-    label.innerText = `News Item: ${currentIndex + 1} / ${news_items.length}`;
+  if (currentIndex >= news_items.length) {
+    container.innerText = "Done! Thank you very much!";
+    label.innerText = `✓ ${news_items.length} / ${news_items.length}`;
+    return;
   }
+
+  const current = news_items[currentIndex];
+
+  container.innerText = current.content;
+  label.innerText = `News Item: ${currentIndex + 1} / ${news_items.length}`;
+
+  document.querySelectorAll('.label-button').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+
+  if (current.label === "yes") {
+    document.getElementById('btn-yes').classList.add('selected');
+  } else if (current.label === "no") {
+    document.getElementById('btn-no').classList.add('selected');
+  } else if (current.label === "unsure") {
+  document.getElementById('btn-unsure').classList.add('selected');
+  }
+}
+
 
 async function label(value) {
   const current = news_items[currentIndex];
+
+  current.label = value;
+
   await fetch("/api/label", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: current.id, label: value })
   });
-  currentIndex++;
   renderText();
 }
 
@@ -45,6 +62,16 @@ function hideCommentForm() {
   textarea.value = "";
 }
 
+function move(direction) {
+  if (direction === 'next' && currentIndex < news_items.length - 1) {
+    currentIndex++;
+  } else if (direction === 'prev' && currentIndex > 0) {
+    currentIndex--;
+  }
+  renderText();
+}
+
+
 window.onload = () => {
   fetchNewsItems();
 
@@ -52,12 +79,14 @@ window.onload = () => {
   if (commentForm) {
     commentForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const current = news_items[currentIndex];
       const comment = document.getElementById("comment-input").value.trim();
       if (!comment) {
         return;
       }
+
+      current.label = "unsure";
+      current.comment = comment;
 
       await fetch("/api/label", {
         method: "POST",
@@ -69,9 +98,15 @@ window.onload = () => {
         })
       });
 
-      currentIndex++;
+      document.querySelectorAll('.label-button').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      document.getElementById('btn-unsure').classList.add('selected');
+
       hideCommentForm();
       renderText();
     });
+
   }
 };

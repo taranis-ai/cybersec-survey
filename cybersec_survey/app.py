@@ -60,8 +60,6 @@ def save_label():
     db.commit()
     db.close()
 
-    session["current_index"] = session.get("current_index", 0) + 1
-
     return jsonify({"status": "ok"})
 
 
