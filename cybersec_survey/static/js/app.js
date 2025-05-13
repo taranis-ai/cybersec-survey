@@ -13,19 +13,49 @@ function renderText() {
   const label = document.getElementById("progress-label");
   const container = document.getElementById("text-container");
 
+  // Conditionally show "Next" button
   if (currentIndex >= news_items.length) {
-    container.innerText = "Done! Thank you very much!";
-    label.innerText = `✓ ${news_items.length} / ${news_items.length}`;
+    document.getElementById("btn-next").style.display = "none";
+  } else {
+    document.getElementById("btn-next").style.display = "inline-block";
+  }
+
+  // Check if clicked "Next" on last News item
+  if (currentIndex >= news_items.length) {
+    container.innerText = "";
+    label.innerText = `${news_items.length} / ${news_items.length}`;
+
+    document.querySelectorAll('.label-button').forEach(btn => {
+      btn.style.display = 'none';
+    });
+
+    hideCommentForm();
+
+    const allLabelled = news_items.every(item =>
+      ['yes', 'no', 'unsure'].includes(item.label)
+    );
+
+    if (!allLabelled) {
+      const msg = document.createElement('p');
+      msg.style.color = 'red';
+      msg.style.fontWeight = 'bold';
+      msg.innerText = '⚠️ Not all items have been classified. Please go back and complete them.';
+      container.appendChild(msg);
+    } else {
+        container.innerText = "Done! Thank you very much!";
+        label.innerText = `✓ ${news_items.length} / ${news_items.length}`;
+    }
+
     return;
   }
 
   const current = news_items[currentIndex];
-
   container.innerText = current.content;
   label.innerText = `News Item: ${currentIndex + 1} / ${news_items.length}`;
 
   document.querySelectorAll('.label-button').forEach(btn => {
     btn.classList.remove('selected');
+    btn.style.display = 'inline-block';
   });
 
   if (current.label === "yes") {
@@ -35,6 +65,18 @@ function renderText() {
   } else if (current.label === "unsure") {
   document.getElementById('btn-unsure').classList.add('selected');
   }
+
+  const commentInput = document.getElementById("comment-input");
+  if (commentInput) {
+    commentInput.value = current.comment || "";
+  }
+
+  if (current.label === "unsure" && current.comment) {
+    showCommentForm();
+  } else {
+    hideCommentForm();
+  }
+
 }
 
 
@@ -63,7 +105,7 @@ function hideCommentForm() {
 }
 
 function move(direction) {
-  if (direction === 'next' && currentIndex < news_items.length - 1) {
+  if (direction === 'next' && currentIndex < news_items.length) {
     currentIndex++;
   } else if (direction === 'prev' && currentIndex > 0) {
     currentIndex--;
@@ -79,14 +121,10 @@ window.onload = () => {
   if (commentForm) {
     commentForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const current = news_items[currentIndex];
       const comment = document.getElementById("comment-input").value.trim();
-      if (!comment) {
-        return;
-      }
-
-      current.label = "unsure";
-      current.comment = comment;
+      if (!comment) return;
 
       await fetch("/api/label", {
         method: "POST",
@@ -98,11 +136,8 @@ window.onload = () => {
         })
       });
 
-      document.querySelectorAll('.label-button').forEach(btn => {
-        btn.classList.remove('selected');
-      });
-
-      document.getElementById('btn-unsure').classList.add('selected');
+      current.label = "unsure";
+      current.comment = comment;
 
       hideCommentForm();
       renderText();

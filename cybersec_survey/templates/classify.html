@@ -61,7 +61,7 @@
     <h2>Cybersecurity News Classifier</h2>
     <p>User: {{ username }}</p>
 
-    <p id="progress-label">News Item: 1 / 10</p>
+    <p id="progress-label">News Item: 1 / 20</p>
     <div id="text-container">Loading...</div>
 
     <div class="button-row">
@@ -89,13 +89,13 @@
     </div>
 
     <div class="button-row" style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
-        <button class="move-button" onclick="move('prev')" type="submit">Previous</button>
+        <button id="btn-prev" class="move-button" onclick="move('prev')" type="submit">Previous</button>
 
         <form method="GET" action="/logout">
           <button class="exit-button" type="submit">Exit</button>
         </form>
 
-        <button class="move-button" onclick="move('next')" type="submit">Next</button>
+        <button id="btn-next" class="move-button" onclick="move('next')" type="submit">Next</button>
     </div>
 
   <script>
