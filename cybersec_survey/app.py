@@ -75,8 +75,12 @@ def login():
 
     if "username" in session:
         return redirect(url_for("classify"))
-
-    return render_template("login.html")
+    return render_template(
+        "login.html",
+        num_news_items=Config.NEWS_ITEMS_PER_SESSION,
+        time_limit_min=Config.NEWS_ITEMS_PER_SESSION // 2,
+        time_limit_max=Config.NEWS_ITEMS_PER_SESSION,
+    )
 
 
 @app.route("/classify")
