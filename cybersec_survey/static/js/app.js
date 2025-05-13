@@ -20,6 +20,17 @@ function renderText() {
     document.getElementById("btn-next").style.display = "inline-block";
   }
 
+  // Turn "Next" into "Finish" if last News Item was reached
+  if (currentIndex === news_items.length - 1) {
+    document.getElementById("btn-next").textContent = "Finish";
+    document.getElementById("btn-next").classList.add("finish-button");
+    document.getElementById("btn-next").classList.remove("move-button");
+  } else {
+    document.getElementById("btn-next").textContent = "Next";
+    document.getElementById("btn-next").classList.remove("finish-button");
+    document.getElementById("btn-next").classList.add("move-button");
+  }
+
   // Check if clicked "Next" on last News item
   if (currentIndex >= news_items.length) {
     container.innerText = "";
