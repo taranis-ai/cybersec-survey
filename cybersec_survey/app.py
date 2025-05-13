@@ -121,10 +121,11 @@ def export_users():
     all_rows = db.query(ClassificationResult).all()
     user_id_dict = {}
     for row in all_rows:
+        row_data = {"id": row.news_item_id, "cybersecurity": row.cybersecurity, "comment": row.comment}
         if row.username in user_id_dict:
-            user_id_dict[row.username].append(row.news_item_id)
+            user_id_dict[row.username].append(row_data)
         else:
-            user_id_dict[row.username] = [row.news_item_id]
+            user_id_dict[row.username] = [row_data]
     db.close()
 
     json_data = json.dumps(user_id_dict, ensure_ascii=False, indent=2)
@@ -151,6 +152,7 @@ def export_all():
             "content": news_item.content.encode("unicode_escape").decode("utf-8"),
             "language": news_item.language,
             "classifications": [{"user": c.username, "cybersecurity": c.cybersecurity} for c in classifications],
+            "comments": [{"user": c.username, "comment": c.comment} for c in classifications],
         }
         export_data.append(result)
 
