@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Info</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <div class="form-container">
+    <h1>Welcome to the Cybersecurity News Classification Tool!</h1>
+    <h3>Please tell us about yourself</h3>
+    <form id="user-form" action="/api/user" method="POST">
+      <div class="field">
+        <label for="role">Role</label>
+        <select id="role" name="role" required>
+          <option value="">– select your role –</option>
+          <option value="scientist">Scientist</option>
+          <option value="engineer">Engineer</option>
+          <option value="manager">Project Manager</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="experience">Experience Level</label>
+        <select id="experience" name="experience" required>
+          <option value="">– select experience –</option>
+          <option value="none">&lt; 1 year</option>
+          <option value="beginner">2-3 years</option>
+          <option value="mid">4-5 years</option>
+          <option value="senior">5+ years</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="news_freq">How often do you read cybersecurity news?</label>
+        <select id="news_freq" name="news_freq" required>
+          <option value="">– select frequency –</option>
+          <option value="seldom">&lt; 1 times per week</option>
+          <option value="weekly">2-3 times per week</option>
+          <option value="daily">daily</option>
+        </select>
+      </div>
+
+      <button type="submit" class="move-button">Continue</button>
+    </form>
+  </div>
+</body>
+</html>

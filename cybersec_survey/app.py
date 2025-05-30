@@ -1,5 +1,5 @@
 from cybersec_survey.db import init_db, get_session
-from cybersec_survey.db.models import NewsItem, ClassificationResult
+from cybersec_survey.db.models import NewsItem, ClassificationResult, User
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for, Response
 import os
 import json
@@ -10,6 +10,28 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev")
 
 init_db()
+
+
+@app.route("/api/user", methods=["POST"])
+def create_user():
+    if "username" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.form
+    db = get_session()
+    import pdb
+
+    pdb.set_trace()
+    user = User(
+        username=session["username"], role=data.get("role", ""), experience=data.get("experience", ""), news_freq=data.get("news_freq", "")
+    )
+    db.add(user)
+    db.commit()
+    db.close()
+
+    session["info_submitted"] = True
+
+    return redirect(url_for("welcome"))
 
 
 @app.route("/api/news_items")
@@ -69,7 +91,7 @@ def login():
         username = request.form.get("username")
         if username:
             session["username"] = username
-            return redirect(url_for("welcome"))
+            return redirect(url_for("user_info"))
         else:
             return render_template("login.html", error="Please enter a name.")
 
@@ -95,6 +117,17 @@ def welcome():
     if "username" not in session:
         return redirect(url_for("login"))
     return render_template("welcome.html", username=session["username"])
+
+
+@app.route("/user_info", methods=["GET"])
+def user_info():
+    if "username" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("info_submitted"):
+        return redirect(url_for("classify"))
+
+    return render_template("info.html", username=session["username"])
 
 
 @app.route("/logout")
