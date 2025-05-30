@@ -170,6 +170,7 @@ function move(direction) {
     currentIndex--;
   }
   renderText();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 
