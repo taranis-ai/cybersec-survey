@@ -12,6 +12,8 @@ async function fetchNewsItems() {
 function renderText() {
   const label = document.getElementById("progress-label");
   const container = document.getElementById("text-container");
+  const nextBtn   = document.getElementById("btn-next");
+  const prevBtn   = document.getElementById("btn-prev");
 
   // Conditionally show "Next" button
   if (currentIndex >= news_items.length) {
@@ -22,13 +24,27 @@ function renderText() {
 
   // Turn "Next" into "Finish" if last News Item was reached
   if (currentIndex === news_items.length - 1) {
-    document.getElementById("btn-next").textContent = "Finish";
-    document.getElementById("btn-next").classList.add("finish-button");
-    document.getElementById("btn-next").classList.remove("move-button");
+    nextBtn.textContent = "Finish";
+    nextBtn.classList.add("finish-button");
+    nextBtn.classList.remove("move-button");
   } else {
-    document.getElementById("btn-next").textContent = "Next";
-    document.getElementById("btn-next").classList.remove("finish-button");
-    document.getElementById("btn-next").classList.add("move-button");
+    nextBtn.textContent = "Next";
+    nextBtn.classList.remove("finish-button");
+    nextBtn.classList.add("move-button");
+  }
+
+  // Disable Next for "unsure" until there is a saved comment
+  if (news_items[currentIndex]) {
+    const current = news_items[currentIndex];
+    if (current.label === "unsure" && !current.comment) {
+      nextBtn.disabled = true;
+      prevBtn.disabled = true;
+    document.getElementById('comment-hint').style.display = 'none';
+    } else {
+      nextBtn.disabled = false;
+      prevBtn.disabled = false;
+      document.getElementById('comment-hint').style.display = 'block';
+    }
   }
 
   // Check if clicked "Next" on last News item
@@ -74,7 +90,7 @@ function renderText() {
   } else if (current.label === "no") {
     document.getElementById('btn-no').classList.add('selected');
   } else if (current.label === "unsure") {
-  document.getElementById('btn-unsure').classList.add('selected');
+    document.getElementById('btn-unsure').classList.add('selected');
   }
 
   const commentInput = document.getElementById("comment-input");
@@ -86,9 +102,20 @@ function renderText() {
     showCommentForm();
   } else {
     hideCommentForm();
-  }
-
 }
+
+  // (re-run the disable‐logic in case we needed to re-enable after save+render)
+  if (current.label === "unsure" && !current.comment) {
+    nextBtn.disabled = true;
+    prevBtn.disabled = true;
+    document.getElementById('comment-hint').style.display = 'block';
+  } else {
+    nextBtn.disabled = false;
+    prevBtn.disabled = false;
+    document.getElementById('comment-hint').style.display = 'none';
+  }
+ }
+
 
 
 async function label(value) {
@@ -104,15 +131,36 @@ async function label(value) {
   renderText();
 }
 
-function showCommentForm() {
-  document.getElementById("comment-section").style.display = "block";
+
+ function showCommentForm() {
+  const current = news_items[currentIndex];
+  current.label = 'unsure';
+
+  document.querySelectorAll('.label-button').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  document.getElementById('btn-unsure').classList.add('selected');
+
+  const section = document.getElementById('comment-section');
+  section.style.display = 'block';
+  section.scrollIntoView({ behavior: 'smooth' });
+
+  document.getElementById('btn-next').disabled = true;
+  document.getElementById('btn-prev').disabled = true;
+  document.getElementById('comment-hint').style.display = 'block';
 }
+
 
 function hideCommentForm() {
   const section = document.getElementById("comment-section");
   const textarea = document.getElementById("comment-input");
   section.style.display = "none";
   textarea.value = "";
+  document.getElementById('comment-hint').style.display = 'none';
+}
+
+function hideSaveComment() {
+    document.getElementById('comment-hint').style.display = 'none';
 }
 
 function move(direction) {

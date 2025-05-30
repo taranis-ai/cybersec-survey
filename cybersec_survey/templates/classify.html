@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="/static/css/styles.css">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <style>
-
     #btn-unsure.selected {
       background-color: #ffc107 !important;
       color: #212529 !important;
@@ -47,7 +46,11 @@
       background-color: #c7c7c7;
       color: #000000;
     }
-
+    .move-button:disabled,
+    .finish-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
     .exit-button:hover,
     .exit-button:active {
       background-color: #dc3545;
@@ -57,8 +60,6 @@
       background-color: #09cecb;
       color: #212529;
     }
-
-
   </style>
 </head>
 <body>
@@ -89,8 +90,12 @@
           placeholder="Enter your comment (max 250 characters)"
         ></textarea>
         <br>
-        <button type="submit">Save Comment</button>
+        <button type="submit" onclick="hideSaveComment()">Save Comment</button>
       </form>
+      <p id="comment-hint"
+        style="color: red; display: none; margin-top: 0.5rem;">
+        Enter a comment and press 'Save comment'
+      </p>
     </div>
 
     <div class="button-row" style="display: flex; justify-content: center; gap: 1rem; margin-top: 1rem;">
