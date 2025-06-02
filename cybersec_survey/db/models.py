@@ -1,6 +1,4 @@
-from enum import Enum
-
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Enum as SAEnum
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from cybersec_survey.config import Config
 
@@ -28,35 +26,17 @@ class ClassificationResult(Base):
     cybersecurity = Column(String, nullable=False)
     comment = Column(String, nullable=False)
 
+    __table_args__ = (UniqueConstraint("username", "news_item_id", name="uq_user_news"),)
     user = relationship("User", back_populates="classifications")
     news_item = relationship("NewsItem")
 
 
-class Role(Enum):
-    SCIENTIST = "Scientist"
-    ENGINEER = "Engineer"
-    MANAGER = "Project Manager"
-    OTHER = "Other"
-
-
-class Experience(Enum):
-    NONE = "< 1 year"
-    JUNIOR = "2-3 years"
-    MID = "4-5 years"
-    SENIOR = "5+ years"
-
-
-class NewsFreq(Enum):
-    SELDOM = "< 1 times per week"
-    WEEKLY = "2-3 times per week"
-    DAILY = "daily"
-
-
 class User(Base):
     __tablename__ = "users"
-    username = Column(String, primary_key=True)
-    role = Column(SAEnum(Role, name="role_enum"), nullable=False)
-    experience = Column(SAEnum(Experience, name="experience_enum"), nullable=False)
-    news_freq = Column(SAEnum(NewsFreq, name="newsfreq_enum"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    username = Column(String, nullable=False)
+    role = Column(String, nullable=False)
+    experience = Column(String, nullable=False)
+    news_freq = Column(String, nullable=False)
 
     classifications = relationship("ClassificationResult", back_populates="user", cascade="all, delete-orphan")

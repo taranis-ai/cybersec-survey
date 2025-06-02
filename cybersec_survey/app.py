@@ -19,9 +19,7 @@ def create_user():
 
     data = request.form
     db = get_session()
-    import pdb
 
-    pdb.set_trace()
     user = User(
         username=session["username"], role=data.get("role", ""), experience=data.get("experience", ""), news_freq=data.get("news_freq", "")
     )
@@ -77,8 +75,18 @@ def save_label():
     comment = data.get("comment", "")
 
     db = get_session()
-    result = ClassificationResult(username=username, news_item_id=news_item_id, cybersecurity=label, comment=comment)
-    db.add(result)
+
+    try:
+        existing = db.query(ClassificationResult).filter_by(username=username, news_item_id=news_item_id).first()
+    except Exception:
+        existing = None
+
+    if existing:
+        existing.cybersecurity = label
+        existing.comment = comment
+    else:
+        result = ClassificationResult(username=username, news_item_id=news_item_id, cybersecurity=label, comment=comment)
+        db.add(result)
     db.commit()
     db.close()
 
@@ -88,15 +96,27 @@ def save_label():
 @app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username")
-        if username:
-            session["username"] = username
+        firstname = request.form.get("firstname", None)
+        lastname = request.form.get("lastname", None)
+
+        if not firstname or not lastname:
+            return render_template("login.html", error="Please enter your first and last name.")
+
+        username = f"{firstname}_{lastname}"
+        db = get_session()
+        try:
+            existing = db.query(User).filter_by(username=username).first()
+        except Exception:
+            existing = None
+        finally:
+            db.close()
+
+        session["username"] = username
+        if not existing:
             return redirect(url_for("user_info"))
         else:
-            return render_template("login.html", error="Please enter a name.")
+            return redirect(url_for("welcome"))
 
-    if "username" in session:
-        return redirect(url_for("classify"))
     return render_template(
         "login.html",
         num_news_items=Config.NEWS_ITEMS_PER_SESSION,
