@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, UniqueConstraint, Boolean
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from cybersec_survey.config import Config
 
@@ -38,5 +38,6 @@ class User(Base):
     role = Column(String, nullable=False)
     experience = Column(String, nullable=False)
     news_freq = Column(String, nullable=False)
+    german = Column(Boolean, nullable=False)
 
     classifications = relationship("ClassificationResult", back_populates="user", cascade="all, delete-orphan")

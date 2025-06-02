@@ -19,9 +19,12 @@ def create_user():
 
     data = request.form
     db = get_session()
-
     user = User(
-        username=session["username"], role=data.get("role", ""), experience=data.get("experience", ""), news_freq=data.get("news_freq", "")
+        username=session["username"],
+        role=data.get("role", ""),
+        experience=data.get("experience", ""),
+        news_freq=data.get("news_freq", ""),
+        german=data.get("german_proficient", "no") == "yes",
     )
     db.add(user)
     db.commit()
@@ -34,7 +37,15 @@ def create_user():
 
 @app.route("/api/news_items")
 def get_news_items():
+    username = session.get("username", "")
     db = get_session()
+
+    try:
+        user = db.query(User).filter_by(username=username).first()
+        only_en = not user.german  # type: ignore
+    except Exception:
+        only_en = True
+
     if "news_item_ids" not in session:
         # Subquery: count how many times each news_item_id appears in classifications
         classification_counts = (
@@ -43,10 +54,13 @@ def get_news_items():
             .subquery()
         )
 
-        # Left join with NewsItem and order by classification count (nulls = 0)
+        base_q = db.query(NewsItem)
+        if only_en:
+            base_q = base_q.filter(NewsItem.language == "en")
+
+        # Left join with classification_counts and order by count asc, then random
         items = (
-            db.query(NewsItem)
-            .outerjoin(classification_counts, NewsItem.id == classification_counts.c.news_item_id)
+            base_q.outerjoin(classification_counts, NewsItem.id == classification_counts.c.news_item_id)
             .order_by(classification_counts.c.class_count.asc().nullsfirst(), func.random())
             .limit(Config.NEWS_ITEMS_PER_SESSION)
             .all()
@@ -55,7 +69,10 @@ def get_news_items():
         session["news_item_ids"] = [item.id for item in items]
         session["current_index"] = 0
     else:
-        items = db.query(NewsItem).filter(NewsItem.id.in_(session["news_item_ids"])).all()
+        q = db.query(NewsItem).filter(NewsItem.id.in_(session["news_item_ids"]))
+        if only_en:
+            q = q.filter(NewsItem.language == "en")
+        items = q.all()
 
     db.close()
     return jsonify({"news_items": [{"id": i.id, "content": i.content} for i in items], "index": session.get("current_index", 0)})
